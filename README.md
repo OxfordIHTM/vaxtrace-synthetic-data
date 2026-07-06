@@ -1,27 +1,28 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# A template R workflow for general data analysis
+# Generating synthetic adverse event from immunisation (AEFI) data for the VAXTRACE project
 
 <!-- badges: start -->
 
 <!-- badges: end -->
 
-This repository is a template for a
+This repository is a
 [`docker`](https://www.docker.com/get-started)-containerised,
 [`{targets}`](https://docs.ropensci.org/targets/)-based,
 [`{renv}`](https://rstudio.github.io/renv/articles/renv.html)-enabled
-[`R`](https://cran.r-project.org/) workflow for general data analysis.
+[`R`](https://cran.r-project.org/) workflow for generating synthetic
+adverse event from immunisation (AEFI) data for the VAXTRACE project.
 
 ## About the Project
 
-\[A DESCRIPTION OF THE PROJECT GOES HERE\]
+\[A DESCRIPTION OF VAXTRACE GOES HERE\]
 
 ## Repository Structure
 
 The project repository is structured as follows:
 
-    ihtm-targets-template
+    vaxtrace-synthetic-data
         |-- .github/
         |-- R/
         |-- data-raw/
@@ -111,7 +112,8 @@ The current workflow has the following steps:
 
 ## Authors
 
-\[LIST OF AUTHORS GOES HERE\]
+Dr Inae Kim - University of Oxford Dr Ernest Guevarra - University of
+Oxford
 
 ## License
 
