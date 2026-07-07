@@ -39,7 +39,7 @@ jobs:
         
       - name: Run workflow
         run: |
-          targets::tar_make()
+          targets::tar_make(synthetic_data_generation_prompt_list)
         shell: Rscript {0}
         
         

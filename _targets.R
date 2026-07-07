@@ -150,6 +150,37 @@ gpt_synthetic_data_targets <- tar_plan(
 )
 
 
+## llama synthetic data generation targets ----
+llama_synthetic_data_targets <- tar_plan(
+  ### Model name for llama LLM ----
+  targets::tar_target(
+    name = llama_model_name,
+    command = get_llm_name("llama4")
+  ),
+
+  ### llama synthetic data generator ----
+  tar_target(
+    name = llama_data_generator,
+    command = ellmer::chat_ollama(
+      model = llama_model_name,
+      echo = "none"
+    )
+  ),
+
+  ### Synthetic data generation ----
+  tar_target(
+    name = llama_synthetic_data_form1,
+    command = llm_generate_synthetic_data(
+      generator = llama_data_generator,
+      prompt = synthetic_data_generation_prompt_list,
+      type = synthetic_data_output_type,
+      model = llama_model_name
+    ),
+    pattern = map(synthetic_data_generation_prompt_list)
+  )
+)
+
+
 ## Processing targets ----
 processing_targets <- tar_plan(
   
