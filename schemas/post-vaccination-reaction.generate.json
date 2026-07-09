@@ -10,7 +10,7 @@
       "pattern": "^[0-9]{10}$",
       "description": "Unique identifier for the client who received the vaccine. Ten numeric digits, e.g. 1234567890. Generate a new identifier at every generation turn."
     },
-    "date": {
+    "vaccination_date": {
       "type": "string",
       "format": "date",
       "description": "The date the vaccine was administered (vaccination date). Format: YYYY-MM-DD."
@@ -28,50 +28,881 @@
       "items": {
         "type": "object",
         "properties": {
-          "trade_name": { "type": "string", "description": "Commercial vaccine name." },
-          "antigens": { "type": "array", "items": { "type": "string" }, "description": "One or more antigens in this product." },
-          "lot": { "type": "string", "description": "Manufacturer lot/batch number." },
-          "expiry_date": { "type": "string", "format": "date", "description": "Product expiry, on or after the vaccination date (top-level `date`)." },
-          "injection_site": { "type": "string", "description": "Anatomical site, or 'N/A'." }
+          "vaccine_trade_name": {
+            "type": "string",
+            "description": "Commercial vaccine name."
+          },
+          "antigens": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "One or more antigens in this product."
+          },
+          "lot_number": {
+            "type": "string",
+            "pattern": "^[0-9]{3}-[0-9]{2}-[0-9]{2}$",
+            "description": "Manufacturer lot/batch number, exact format [0-9]{3}-[0-9]{2}-[0-9]{2}, e.g. 123-01-01."
+          },
+          "expiry_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Product expiry, on or after the vaccination date (top-level `vaccination_date`)."
+          },
+          "injection_site": {
+            "type": "string",
+            "description": "Anatomical site, or 'N/A'."
+          }
         },
-        "required": ["trade_name", "antigens", "lot", "expiry_date", "injection_site"]
+        "required": [
+          "vaccine_trade_name",
+          "antigens",
+          "lot_number",
+          "expiry_date",
+          "injection_site"
+        ]
       }
     },
     "reactions": {
       "type": "array",
-      "description": "Emit one entry per reaction on the checklist. For reactions that did not occur, set occurred = false and omit the detail fields.",
-      "items": { "$ref": "#/$defs/reaction" }
+      "minItems": 17,
+      "maxItems": 17,
+      "description": "Emit exactly one entry per reaction on the checklist -- all 17, in the fixed order below. Each slot's reaction_type and category are predetermined; you supply occurred and, where occurred is true, the detail fields.",
+      "prefixItems": [
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "local"
+            },
+            "reaction_type": {
+              "const": "Pain at injection site"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "local"
+            },
+            "reaction_type": {
+              "const": "Swelling/induration at injection site"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "local"
+            },
+            "reaction_type": {
+              "const": "Redness/bruising at injection site"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "local"
+            },
+            "reaction_type": {
+              "const": "Localised rash"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Rash/hives"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Headache"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Cyanosis/pallor"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Difficulty breathing"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Nausea/vomiting"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Diarrhoea"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Poor appetite/loss of appetite"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Fatigue/malaise"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Fever"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Drowsiness"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Muscle aches/joint pain"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "systemic"
+            },
+            "reaction_type": {
+              "const": "Irritability/fussiness (children < 6 years old)"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "enum": [
+                "local",
+                "systemic"
+              ]
+            },
+            "reaction_type": {
+              "const": "Other"
+            },
+            "occurred": {
+              "type": "boolean",
+              "description": "The Yes/No question for this reaction."
+            },
+            "specify": {
+              "type": "string",
+              "description": "Free text naming the other reaction."
+            },
+            "managed_at_centre": {
+              "$ref": "#/$defs/management"
+            },
+            "managed_at_home": {
+              "$ref": "#/$defs/management"
+            },
+            "treatment_start_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "treatment_end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "On or after treatment_start_date."
+            },
+            "symptom_start_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom onset (single date-time)."
+            },
+            "symptom_end_datetime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Symptom resolution; on or after onset."
+            }
+          },
+          "required": [
+            "category",
+            "reaction_type",
+            "occurred"
+          ]
+        }
+      ]
     }
   },
-  "required": ["client_id", "date", "vaccines_given_count", "vaccines", "reactions"],
+  "required": [
+    "client_id",
+    "vaccination_date",
+    "vaccines_given_count",
+    "vaccines",
+    "reactions"
+  ],
   "$defs": {
     "grade": {
       "type": "integer",
-      "enum": [1, 2, 3],
+      "enum": [
+        1,
+        2,
+        3
+      ],
       "description": "Severity 1 (mild) to 3 (severe), per the reaction-specific legend in the source form."
     },
     "management": {
       "type": "object",
       "description": "Present only when this reaction was managed in this setting.",
       "properties": {
-        "recorded": { "type": "boolean", "description": "Whether management occurred in this setting." },
-        "grade": { "$ref": "#/$defs/grade" },
-        "adrenaline": { "type": "boolean", "description": "Adrenaline administered (center only)." },
-        "other": { "type": "string", "description": "Other management/treatment given." }
+        "recorded": {
+          "type": "boolean",
+          "description": "Whether management occurred in this setting."
+        },
+        "grade": {
+          "$ref": "#/$defs/grade"
+        },
+        "adrenaline": {
+          "type": "boolean",
+          "description": "Adrenaline administered (centre only)."
+        },
+        "other": {
+          "type": "string",
+          "description": "Other management/treatment given."
+        }
       },
-      "required": ["recorded"]
+      "required": [
+        "recorded"
+      ]
     },
     "reaction": {
       "type": "object",
       "properties": {
-        "category": { "type": "string", "enum": ["local", "systemic"] },
+        "category": {
+          "type": "string",
+          "enum": [
+            "local",
+            "systemic"
+          ]
+        },
         "reaction_type": {
           "type": "string",
           "enum": [
             "Pain at injection site",
             "Swelling/induration at injection site",
             "Redness/bruising at injection site",
-            "Localized rash",
+            "Localised rash",
             "Rash/hives",
             "Headache",
             "Cyanosis/pallor",
@@ -87,16 +918,45 @@
             "Other"
           ]
         },
-        "specify": { "type": "string", "description": "Free text; required only when reaction_type = Other." },
-        "occurred": { "type": "boolean", "description": "The Yes/No question for this reaction." },
-        "managed_at_center": { "$ref": "#/$defs/management" },
-        "managed_at_home": { "$ref": "#/$defs/management" },
-        "treatment_start_date": { "type": "string", "format": "date" },
-        "treatment_end_date": { "type": "string", "format": "date", "description": "On or after treatment_start_date." },
-        "symptom_start_datetime": { "type": "string", "format": "date-time", "description": "Symptom onset (single date-time)." },
-        "symptom_end_datetime": { "type": "string", "format": "date-time", "description": "Symptom resolution; on or after onset." }
+        "specify": {
+          "type": "string",
+          "description": "Free text; required only when reaction_type = Other."
+        },
+        "occurred": {
+          "type": "boolean",
+          "description": "The Yes/No question for this reaction."
+        },
+        "managed_at_centre": {
+          "$ref": "#/$defs/management"
+        },
+        "managed_at_home": {
+          "$ref": "#/$defs/management"
+        },
+        "treatment_start_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "treatment_end_date": {
+          "type": "string",
+          "format": "date",
+          "description": "On or after treatment_start_date."
+        },
+        "symptom_start_datetime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Symptom onset (single date-time)."
+        },
+        "symptom_end_datetime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Symptom resolution; on or after onset."
+        }
       },
-      "required": ["reaction_type", "category", "occurred"]
+      "required": [
+        "reaction_type",
+        "category",
+        "occurred"
+      ]
     }
   }
 }

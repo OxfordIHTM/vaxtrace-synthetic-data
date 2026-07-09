@@ -1,0 +1,791 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OxfordIHTM/vaxtrace-synthetic-data/schemas/anaphylaxis.generate.json",
+  "title": "Anaphylaxis case record (synthetic generation)",
+  "description": "One filled-in post-vaccination anaphylaxis case form. Generate plausible, internally consistent values: onset must follow the last vaccination, at least one manifestation must be present, and detail fields (agent, severity, management, hospital) should appear ONLY where the corresponding flag is true.",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "pattern": "^[0-9]{10}$",
+      "description": "Unique identifier for the client who received the vaccine. Ten numeric digits, e.g. 1234567890. Generate a new identifier at every generation turn."
+    },
+    "centre_id": {
+      "type": "string",
+      "pattern": "^centre_[0-9]{1,3}$",
+      "description": "Pseudonymised vaccination centre, e.g. centre_7."
+    },
+    "medical_region": {
+      "type": "string",
+      "description": "Medical region the centre belongs to."
+    },
+    "sex": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female"
+      ],
+      "description": "Sex of the client."
+    },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date",
+      "description": "Pseudonymised date of birth. Format: YYYY-MM-DD. Must be consistent with age_value and age_unit."
+    },
+    "age_value": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 120,
+      "description": "Age at vaccination, expressed in the unit given by age_unit."
+    },
+    "age_unit": {
+      "type": "string",
+      "enum": [
+        "months",
+        "years"
+      ],
+      "description": "Use months for clients under 2 years old, otherwise years."
+    },
+    "weight_kg": {
+      "type": "number",
+      "minimum": 2,
+      "maximum": 150,
+      "description": "Body weight in kilograms."
+    },
+    "allergy_history": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "description": "Emit exactly one entry per allergen category -- all 4, in the fixed order below. For categories with no known allergy set present = false and omit agent and severity_grade.",
+      "prefixItems": [
+        {
+          "type": "object",
+          "properties": {
+            "allergen_type": {
+              "const": "medicine"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "Whether a prior allergy to this category is known."
+            },
+            "agent": {
+              "type": "string",
+              "description": "The specific medicine, food, vaccine or other causative agent."
+            },
+            "severity_grade": {
+              "$ref": "#/$defs/grade"
+            }
+          },
+          "required": [
+            "allergen_type",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "allergen_type": {
+              "const": "food"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "Whether a prior allergy to this category is known."
+            },
+            "agent": {
+              "type": "string",
+              "description": "The specific medicine, food, vaccine or other causative agent."
+            },
+            "severity_grade": {
+              "$ref": "#/$defs/grade"
+            }
+          },
+          "required": [
+            "allergen_type",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "allergen_type": {
+              "const": "vaccine"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "Whether a prior allergy to this category is known."
+            },
+            "agent": {
+              "type": "string",
+              "description": "The specific medicine, food, vaccine or other causative agent."
+            },
+            "severity_grade": {
+              "$ref": "#/$defs/grade"
+            }
+          },
+          "required": [
+            "allergen_type",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "allergen_type": {
+              "const": "other"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "Whether a prior allergy to this category is known."
+            },
+            "agent": {
+              "type": "string",
+              "description": "The specific medicine, food, vaccine or other causative agent."
+            },
+            "severity_grade": {
+              "$ref": "#/$defs/grade"
+            }
+          },
+          "required": [
+            "allergen_type",
+            "present"
+          ]
+        }
+      ]
+    },
+    "vaccines_given_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3,
+      "description": "Number of vaccines given at this vaccination event; must equal vaccines.length."
+    },
+    "vaccines": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "Vaccines administered at the vaccination event that preceded the reaction.",
+      "items": {
+        "$ref": "#/$defs/vaccine"
+      }
+    },
+    "onset_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time the reaction was first observed. Must be on or after the latest vaccine vaccination_date_time."
+    },
+    "minutes_after_vaccination": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Elapsed minutes from the latest vaccination to onset_datetime."
+    },
+    "manifestations": {
+      "type": "array",
+      "minItems": 17,
+      "maxItems": 17,
+      "description": "Emit exactly one entry per symptom on the checklist -- all 17, in the fixed order below. Each slot's symptom and body_system are predetermined; you supply present, and a specify note only on the 'Other' slot when present.",
+      "prefixItems": [
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "skin/mucosa"
+            },
+            "symptom": {
+              "const": "Angioedema"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "skin/mucosa"
+            },
+            "symptom": {
+              "const": "Rash"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "respiratory"
+            },
+            "symptom": {
+              "const": "Difficulty breathing"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "respiratory"
+            },
+            "symptom": {
+              "const": "Cough"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "circulatory"
+            },
+            "symptom": {
+              "const": "Cyanosis"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "circulatory"
+            },
+            "symptom": {
+              "const": "Hypotension"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "circulatory"
+            },
+            "symptom": {
+              "const": "Fainting"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "neurological"
+            },
+            "symptom": {
+              "const": "Convulsion"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "neurological"
+            },
+            "symptom": {
+              "const": "Crying/irritability"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "neurological"
+            },
+            "symptom": {
+              "const": "Drowsiness/confusion"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "gastrointestinal"
+            },
+            "symptom": {
+              "const": "Abdominal pain"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "gastrointestinal"
+            },
+            "symptom": {
+              "const": "Refusal to feed"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "gastrointestinal"
+            },
+            "symptom": {
+              "const": "Diarrhoea"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "gastrointestinal"
+            },
+            "symptom": {
+              "const": "Vomiting"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "other"
+            },
+            "symptom": {
+              "const": "Fever"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "other"
+            },
+            "symptom": {
+              "const": "Swelling, pain, redness at injection site"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "body_system": {
+              "const": "other"
+            },
+            "symptom": {
+              "const": "Other"
+            },
+            "present": {
+              "type": "boolean",
+              "description": "The yes/no checkbox for this symptom."
+            },
+            "specify": {
+              "type": "string",
+              "description": "Free text naming the other symptom."
+            }
+          },
+          "required": [
+            "body_system",
+            "symptom",
+            "present"
+          ]
+        }
+      ]
+    },
+    "clinical_description": {
+      "type": "string",
+      "description": "Narrative of symptoms, vital signs and clinical course, consistent with the manifestations marked present."
+    },
+    "centre_care": {
+      "type": "object",
+      "description": "Diagnosis and management at the centre. Omit entirely when the client self-presented to hospital and was never assessed at the centre.",
+      "properties": {
+        "anaphylaxis_grade": {
+          "$ref": "#/$defs/grade"
+        },
+        "management": {
+          "type": "string",
+          "description": "Treatment given at the centre, e.g. positioning, oxygen, intramuscular adrenaline, IV fluids, corticosteroids."
+        },
+        "hospital_transfer": {
+          "type": "boolean",
+          "description": "Client was transferred from the centre to hospital."
+        },
+        "home_monitoring": {
+          "type": "boolean",
+          "description": "Client was monitored at home rather than transferred. Mutually exclusive with hospital_transfer."
+        }
+      },
+      "required": [
+        "anaphylaxis_grade",
+        "management",
+        "hospital_transfer",
+        "home_monitoring"
+      ]
+    },
+    "self_care": {
+      "type": "object",
+      "description": "What the client or family did before reaching the centre or hospital.",
+      "properties": {
+        "managed_at_home": {
+          "type": "boolean",
+          "description": "Client self-managed at home before presenting."
+        },
+        "home_management": {
+          "type": "string",
+          "description": "Detailed description of home management. Present only when managed_at_home is true."
+        },
+        "self_admitted_to_hospital": {
+          "type": "boolean",
+          "description": "Client went to hospital directly rather than being transferred by the centre."
+        }
+      },
+      "required": [
+        "managed_at_home",
+        "self_admitted_to_hospital"
+      ]
+    },
+    "hospital_care": {
+      "type": "object",
+      "description": "Present when the client reached hospital, whether by centre transfer or self-admission.",
+      "properties": {
+        "diagnosis": {
+          "type": "string",
+          "description": "Diagnosis recorded at hospital, including anaphylaxis grade and hour of reaction."
+        },
+        "management": {
+          "type": "string",
+          "description": "Treatment given at hospital."
+        }
+      },
+      "required": [
+        "diagnosis",
+        "management"
+      ]
+    },
+    "resolution": {
+      "type": "object",
+      "description": "End of the episode: onset of symptoms through to their resolution (through resolution of phase 2 when the reaction was biphasic).",
+      "properties": {
+        "end_known": {
+          "type": "boolean",
+          "description": "False when the case was closed under OnCall PUST rules without end-time information."
+        },
+        "end_datetime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Resolution of symptoms; on or after onset_datetime. Present only when end_known is true."
+        },
+        "duration_days": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Days from onset to resolution. Present only when end_known is true."
+        },
+        "biphasic": {
+          "type": "boolean",
+          "description": "Whether a second phase of anaphylaxis occurred."
+        },
+        "phase2_onset_datetime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Start of phase 2; present only when biphasic is true."
+        }
+      },
+      "required": [
+        "end_known",
+        "biphasic"
+      ]
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "recovered",
+        "sequelae",
+        "death"
+      ],
+      "description": "Outcome at case closure. Coded 1, 2 and 3 respectively on the source form."
+    }
+  },
+  "required": [
+    "client_id",
+    "centre_id",
+    "sex",
+    "date_of_birth",
+    "age_value",
+    "age_unit",
+    "weight_kg",
+    "allergy_history",
+    "vaccines_given_count",
+    "vaccines",
+    "onset_datetime",
+    "minutes_after_vaccination",
+    "manifestations",
+    "clinical_description",
+    "self_care",
+    "resolution",
+    "outcome"
+  ],
+  "$defs": {
+    "grade": {
+      "type": "integer",
+      "enum": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "description": "Anaphylaxis severity, grade I (mild) to grade IV (cardiac arrest)."
+    },
+    "allergy": {
+      "type": "object",
+      "description": "One allergen category from the client's history.",
+      "properties": {
+        "allergen_type": {
+          "type": "string",
+          "enum": [
+            "medicine",
+            "food",
+            "vaccine",
+            "other"
+          ],
+          "description": "Which of the four categories on the form this entry covers."
+        },
+        "present": {
+          "type": "boolean",
+          "description": "Whether a prior allergy to this category is known."
+        },
+        "agent": {
+          "type": "string",
+          "description": "The specific medicine, food, vaccine or other causative agent."
+        },
+        "severity_grade": {
+          "$ref": "#/$defs/grade"
+        }
+      },
+      "required": [
+        "allergen_type",
+        "present"
+      ]
+    },
+    "vaccine": {
+      "type": "object",
+      "properties": {
+        "vaccine_trade_name": {
+          "type": "string",
+          "description": "Commercial vaccine name, e.g. Pneumovax 23, Qdenga, Typhoid Vi."
+        },
+        "dose_number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "Which dose in the schedule this was."
+        },
+        "vaccination_date_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date and time this vaccine was given."
+        },
+        "lot_number": {
+          "type": "string",
+          "pattern": "^[0-9]{3}-[0-9]{2}-[0-9]{2}$",
+          "description": "Manufacturer lot/batch number, exact format [0-9]{3}-[0-9]{2}-[0-9]{2}, e.g. 123-01-01."
+        }
+      },
+      "required": [
+        "vaccine_trade_name",
+        "dose_number",
+        "vaccination_date_time",
+        "lot_number"
+      ]
+    },
+    "manifestation": {
+      "type": "object",
+      "properties": {
+        "body_system": {
+          "type": "string",
+          "enum": [
+            "skin/mucosa",
+            "respiratory",
+            "circulatory",
+            "neurological",
+            "gastrointestinal",
+            "other"
+          ],
+          "description": "The body system grouping this symptom sits under on the form."
+        },
+        "symptom": {
+          "type": "string",
+          "enum": [
+            "Angioedema",
+            "Rash",
+            "Difficulty breathing",
+            "Cough",
+            "Cyanosis",
+            "Hypotension",
+            "Fainting",
+            "Convulsion",
+            "Crying/irritability",
+            "Drowsiness/confusion",
+            "Abdominal pain",
+            "Refusal to feed",
+            "Diarrhoea",
+            "Vomiting",
+            "Fever",
+            "Swelling, pain, redness at injection site",
+            "Other"
+          ]
+        },
+        "present": {
+          "type": "boolean",
+          "description": "The yes/no checkbox for this symptom."
+        },
+        "specify": {
+          "type": "string",
+          "description": "Free text; used only when symptom = Other."
+        }
+      },
+      "required": [
+        "body_system",
+        "symptom",
+        "present"
+      ]
+    }
+  }
+}

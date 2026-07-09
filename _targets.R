@@ -80,6 +80,10 @@ source("_targets_form2.R")
 source("_targets_form3.R")
 
 
+## Form 4 synthetic data generation targets ----
+source("_targets_form4.R")
+
+
 ## Processing targets ----
 processing_targets <- tar_plan(
   ### Concatenate form1 synthetic data ----
@@ -138,6 +142,30 @@ processing_targets <- tar_plan(
   tar_target(
     name = synthetic_data_processed_form3,
     command = process_synthetic_data(synthetic_data_raw_flattened_form3)
+  ),
+
+  ### Concatenate form4 synthetic data ----
+  tar_target(
+    name = synthetic_data_raw_form4,
+    command = c(
+      gemma = gemma_form4_synthetic_data,
+      gpt = gpt_form4_synthetic_data,
+      llama = llama_form4_synthetic_data,
+      qwen = qwen_form4_synthetic_data
+    )
+  ),
+
+  ### Flatten form4 synthetic data raw ----
+  tar_target(
+    name = synthetic_data_raw_flattened_form4,
+    command = flatten_form4_record(synthetic_data_raw_form4),
+    pattern = map(synthetic_data_raw_form4)
+  ),
+
+  ### Process form4 synthetic data ----
+  tar_target(
+    name = synthetic_data_processed_form4,
+    command = process_synthetic_data(synthetic_data_raw_flattened_form4)
   )
 )
 

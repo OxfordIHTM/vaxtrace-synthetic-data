@@ -1,0 +1,1149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OxfordIHTM/vaxtrace-synthetic-data/schemas/anaphylaxis.validate.json",
+  "title": "Anaphylaxis case record (validation)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "pattern": "^[0-9]{10}$"
+    },
+    "centre_id": {
+      "type": "string",
+      "pattern": "^centre_[0-9]{1,3}$"
+    },
+    "medical_region": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sex": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female"
+      ]
+    },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date"
+    },
+    "age_value": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 120
+    },
+    "age_unit": {
+      "type": "string",
+      "enum": [
+        "months",
+        "years"
+      ]
+    },
+    "weight_kg": {
+      "type": "number",
+      "minimum": 2,
+      "maximum": 150
+    },
+    "allergy_history": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/allergy"
+            },
+            {
+              "properties": {
+                "allergen_type": {
+                  "const": "medicine"
+                }
+              },
+              "required": [
+                "allergen_type"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/allergy"
+            },
+            {
+              "properties": {
+                "allergen_type": {
+                  "const": "food"
+                }
+              },
+              "required": [
+                "allergen_type"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/allergy"
+            },
+            {
+              "properties": {
+                "allergen_type": {
+                  "const": "vaccine"
+                }
+              },
+              "required": [
+                "allergen_type"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/allergy"
+            },
+            {
+              "properties": {
+                "allergen_type": {
+                  "const": "other"
+                }
+              },
+              "required": [
+                "allergen_type"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "vaccines_given_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "vaccines": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/vaccine"
+      }
+    },
+    "onset_datetime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "minutes_after_vaccination": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "manifestations": {
+      "type": "array",
+      "minItems": 17,
+      "maxItems": 17,
+      "contains": {
+        "comment": "An anaphylaxis record must carry at least one observed symptom.",
+        "type": "object",
+        "properties": {
+          "present": {
+            "const": true
+          }
+        },
+        "required": [
+          "present"
+        ]
+      },
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "skin/mucosa"
+                },
+                "symptom": {
+                  "const": "Angioedema"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "skin/mucosa"
+                },
+                "symptom": {
+                  "const": "Rash"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "respiratory"
+                },
+                "symptom": {
+                  "const": "Difficulty breathing"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "respiratory"
+                },
+                "symptom": {
+                  "const": "Cough"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "circulatory"
+                },
+                "symptom": {
+                  "const": "Cyanosis"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "circulatory"
+                },
+                "symptom": {
+                  "const": "Hypotension"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "circulatory"
+                },
+                "symptom": {
+                  "const": "Fainting"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "neurological"
+                },
+                "symptom": {
+                  "const": "Convulsion"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "neurological"
+                },
+                "symptom": {
+                  "const": "Crying/irritability"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "neurological"
+                },
+                "symptom": {
+                  "const": "Drowsiness/confusion"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "gastrointestinal"
+                },
+                "symptom": {
+                  "const": "Abdominal pain"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "gastrointestinal"
+                },
+                "symptom": {
+                  "const": "Refusal to feed"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "gastrointestinal"
+                },
+                "symptom": {
+                  "const": "Diarrhoea"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "gastrointestinal"
+                },
+                "symptom": {
+                  "const": "Vomiting"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "other"
+                },
+                "symptom": {
+                  "const": "Fever"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "other"
+                },
+                "symptom": {
+                  "const": "Swelling, pain, redness at injection site"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/manifestation"
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "other"
+                },
+                "symptom": {
+                  "const": "Other"
+                }
+              },
+              "required": [
+                "body_system",
+                "symptom"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "clinical_description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "centre_care": {
+      "$ref": "#/$defs/centre_care"
+    },
+    "self_care": {
+      "$ref": "#/$defs/self_care"
+    },
+    "hospital_care": {
+      "$ref": "#/$defs/hospital_care"
+    },
+    "resolution": {
+      "$ref": "#/$defs/resolution"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "recovered",
+        "sequelae",
+        "death"
+      ]
+    }
+  },
+  "required": [
+    "client_id",
+    "centre_id",
+    "sex",
+    "date_of_birth",
+    "age_value",
+    "age_unit",
+    "weight_kg",
+    "allergy_history",
+    "vaccines_given_count",
+    "vaccines",
+    "onset_datetime",
+    "minutes_after_vaccination",
+    "manifestations",
+    "clinical_description",
+    "self_care",
+    "resolution",
+    "outcome"
+  ],
+  "allOf": [
+    {
+      "comment": "A client transferred to hospital by the centre must have a hospital record.",
+      "if": {
+        "properties": {
+          "centre_care": {
+            "properties": {
+              "hospital_transfer": {
+                "const": true
+              }
+            },
+            "required": [
+              "hospital_transfer"
+            ]
+          }
+        },
+        "required": [
+          "centre_care"
+        ]
+      },
+      "then": {
+        "required": [
+          "hospital_care"
+        ]
+      }
+    },
+    {
+      "comment": "A client who self-admitted to hospital must have a hospital record.",
+      "if": {
+        "properties": {
+          "self_care": {
+            "properties": {
+              "self_admitted_to_hospital": {
+                "const": true
+              }
+            },
+            "required": [
+              "self_admitted_to_hospital"
+            ]
+          }
+        },
+        "required": [
+          "self_care"
+        ]
+      },
+      "then": {
+        "required": [
+          "hospital_care"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "grade": {
+      "type": "integer",
+      "enum": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "allergy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allergen_type": {
+          "type": "string",
+          "enum": [
+            "medicine",
+            "food",
+            "vaccine",
+            "other"
+          ]
+        },
+        "present": {
+          "type": "boolean"
+        },
+        "agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity_grade": {
+          "$ref": "#/$defs/grade"
+        }
+      },
+      "required": [
+        "allergen_type",
+        "present"
+      ],
+      "allOf": [
+        {
+          "comment": "A known allergy must name its agent and severity.",
+          "if": {
+            "properties": {
+              "present": {
+                "const": true
+              }
+            },
+            "required": [
+              "present"
+            ]
+          },
+          "then": {
+            "required": [
+              "agent",
+              "severity_grade"
+            ]
+          }
+        },
+        {
+          "comment": "An absent allergy must carry no detail fields.",
+          "if": {
+            "properties": {
+              "present": {
+                "const": false
+              }
+            },
+            "required": [
+              "present"
+            ]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "agent"
+                  ]
+                },
+                {
+                  "required": [
+                    "severity_grade"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "vaccine": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "vaccine_trade_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dose_number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "vaccination_date_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lot_number": {
+          "type": "string",
+          "pattern": "^[0-9]{3}-[0-9]{2}-[0-9]{2}$"
+        }
+      },
+      "required": [
+        "vaccine_trade_name",
+        "dose_number",
+        "vaccination_date_time",
+        "lot_number"
+      ]
+    },
+    "manifestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "body_system": {
+          "type": "string",
+          "enum": [
+            "skin/mucosa",
+            "respiratory",
+            "circulatory",
+            "neurological",
+            "gastrointestinal",
+            "other"
+          ]
+        },
+        "symptom": {
+          "type": "string",
+          "enum": [
+            "Angioedema",
+            "Rash",
+            "Difficulty breathing",
+            "Cough",
+            "Cyanosis",
+            "Hypotension",
+            "Fainting",
+            "Convulsion",
+            "Crying/irritability",
+            "Drowsiness/confusion",
+            "Abdominal pain",
+            "Refusal to feed",
+            "Diarrhoea",
+            "Vomiting",
+            "Fever",
+            "Swelling, pain, redness at injection site",
+            "Other"
+          ]
+        },
+        "present": {
+          "type": "boolean"
+        },
+        "specify": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "body_system",
+        "symptom",
+        "present"
+      ],
+      "allOf": [
+        {
+          "comment": "Each symptom belongs to exactly one body system on the source form.",
+          "oneOf": [
+            {
+              "properties": {
+                "body_system": {
+                  "const": "skin/mucosa"
+                },
+                "symptom": {
+                  "enum": [
+                    "Angioedema",
+                    "Rash"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "respiratory"
+                },
+                "symptom": {
+                  "enum": [
+                    "Difficulty breathing",
+                    "Cough"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "circulatory"
+                },
+                "symptom": {
+                  "enum": [
+                    "Cyanosis",
+                    "Hypotension",
+                    "Fainting"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "neurological"
+                },
+                "symptom": {
+                  "enum": [
+                    "Convulsion",
+                    "Crying/irritability",
+                    "Drowsiness/confusion"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "gastrointestinal"
+                },
+                "symptom": {
+                  "enum": [
+                    "Abdominal pain",
+                    "Refusal to feed",
+                    "Diarrhoea",
+                    "Vomiting"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "body_system": {
+                  "const": "other"
+                },
+                "symptom": {
+                  "enum": [
+                    "Fever",
+                    "Swelling, pain, redness at injection site",
+                    "Other"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "comment": "An observed 'Other' symptom requires a specify note.",
+          "if": {
+            "properties": {
+              "symptom": {
+                "const": "Other"
+              },
+              "present": {
+                "const": true
+              }
+            },
+            "required": [
+              "symptom",
+              "present"
+            ]
+          },
+          "then": {
+            "required": [
+              "specify"
+            ]
+          }
+        },
+        {
+          "comment": "A symptom that was not observed must carry no specify note.",
+          "if": {
+            "properties": {
+              "present": {
+                "const": false
+              }
+            },
+            "required": [
+              "present"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "specify"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "centre_care": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "anaphylaxis_grade": {
+          "$ref": "#/$defs/grade"
+        },
+        "management": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hospital_transfer": {
+          "type": "boolean"
+        },
+        "home_monitoring": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "anaphylaxis_grade",
+        "management",
+        "hospital_transfer",
+        "home_monitoring"
+      ],
+      "not": {
+        "comment": "Transfer to hospital and monitoring at home are mutually exclusive dispositions.",
+        "properties": {
+          "hospital_transfer": {
+            "const": true
+          },
+          "home_monitoring": {
+            "const": true
+          }
+        },
+        "required": [
+          "hospital_transfer",
+          "home_monitoring"
+        ]
+      }
+    },
+    "self_care": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "managed_at_home": {
+          "type": "boolean"
+        },
+        "home_management": {
+          "type": "string",
+          "minLength": 1
+        },
+        "self_admitted_to_hospital": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "managed_at_home",
+        "self_admitted_to_hospital"
+      ],
+      "allOf": [
+        {
+          "comment": "Home management is described only when it happened.",
+          "if": {
+            "properties": {
+              "managed_at_home": {
+                "const": false
+              }
+            },
+            "required": [
+              "managed_at_home"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "home_management"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "managed_at_home": {
+                "const": true
+              }
+            },
+            "required": [
+              "managed_at_home"
+            ]
+          },
+          "then": {
+            "required": [
+              "home_management"
+            ]
+          }
+        }
+      ]
+    },
+    "hospital_care": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "diagnosis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "management": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "diagnosis",
+        "management"
+      ]
+    },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "end_known": {
+          "type": "boolean"
+        },
+        "end_datetime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "duration_days": {
+          "type": "number",
+          "minimum": 0
+        },
+        "biphasic": {
+          "type": "boolean"
+        },
+        "phase2_onset_datetime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "end_known",
+        "biphasic"
+      ],
+      "allOf": [
+        {
+          "comment": "An unknown end time carries neither an end date-time nor a duration.",
+          "if": {
+            "properties": {
+              "end_known": {
+                "const": false
+              }
+            },
+            "required": [
+              "end_known"
+            ]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "end_datetime"
+                  ]
+                },
+                {
+                  "required": [
+                    "duration_days"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "end_known": {
+                "const": true
+              }
+            },
+            "required": [
+              "end_known"
+            ]
+          },
+          "then": {
+            "required": [
+              "end_datetime",
+              "duration_days"
+            ]
+          }
+        },
+        {
+          "comment": "A biphasic reaction records when phase 2 began.",
+          "if": {
+            "properties": {
+              "biphasic": {
+                "const": true
+              }
+            },
+            "required": [
+              "biphasic"
+            ]
+          },
+          "then": {
+            "required": [
+              "phase2_onset_datetime"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "biphasic": {
+                "const": false
+              }
+            },
+            "required": [
+              "biphasic"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "phase2_onset_datetime"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
