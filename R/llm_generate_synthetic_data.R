@@ -3,10 +3,10 @@
 #' 
 #' 
 
-llm_generate_synthetic_data <- function(generator, prompt, type, model,
-                                        ollama = FALSE, max_tries = 3L) {
+llm_generate_synthetic_data <- function(generator, prompt, type, max_tries = 3L,
+                                        keep_turns = TRUE) {
   for (attempt in seq_len(max_tries)) {
-    generator <- generator$set_turns(list())
+    if (!keep_turns) generator <- generator$set_turns(list())
     
     out <- tryCatch(
       generator$chat_structured(

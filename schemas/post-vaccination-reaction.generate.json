@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OxfordIHTM/vaxtrace-synthetic-data/schemas/post-vaccination-reaction.generate.json",
+  "title": "Post-vaccination reaction record (synthetic generation)",
+  "description": "One filled-in post-vaccination reaction monitoring form. Generate plausible, internally consistent values: detail fields (grades, dates, management) should be present ONLY for reactions where occurred = true.",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "pattern": "^[0-9]{10}$",
+      "description": "Unique identifier for the client who received the vaccine. Ten numeric digits, e.g. 1234567890. Generate a new identifier at every generation turn."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "The date the vaccine was administered (vaccination date). Format: YYYY-MM-DD."
+    },
+    "vaccines_given_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4,
+      "description": "Number of vaccines given at this vaccination event; must equal vaccines.length."
+    },
+    "vaccines": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Vaccines administered at this vaccination event.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trade_name": { "type": "string", "description": "Commercial vaccine name." },
+          "antigens": { "type": "array", "items": { "type": "string" }, "description": "One or more antigens in this product." },
+          "lot": { "type": "string", "description": "Manufacturer lot/batch number." },
+          "expiry_date": { "type": "string", "format": "date", "description": "Product expiry, on or after the vaccination date (top-level `date`)." },
+          "injection_site": { "type": "string", "description": "Anatomical site, or 'N/A'." }
+        },
+        "required": ["trade_name", "antigens", "lot", "expiry_date", "injection_site"]
+      }
+    },
+    "reactions": {
+      "type": "array",
+      "description": "Emit one entry per reaction on the checklist. For reactions that did not occur, set occurred = false and omit the detail fields.",
+      "items": { "$ref": "#/$defs/reaction" }
+    }
+  },
+  "required": ["client_id", "date", "vaccines_given_count", "vaccines", "reactions"],
+  "$defs": {
+    "grade": {
+      "type": "integer",
+      "enum": [1, 2, 3],
+      "description": "Severity 1 (mild) to 3 (severe), per the reaction-specific legend in the source form."
+    },
+    "management": {
+      "type": "object",
+      "description": "Present only when this reaction was managed in this setting.",
+      "properties": {
+        "recorded": { "type": "boolean", "description": "Whether management occurred in this setting." },
+        "grade": { "$ref": "#/$defs/grade" },
+        "adrenaline": { "type": "boolean", "description": "Adrenaline administered (center only)." },
+        "other": { "type": "string", "description": "Other management/treatment given." }
+      },
+      "required": ["recorded"]
+    },
+    "reaction": {
+      "type": "object",
+      "properties": {
+        "category": { "type": "string", "enum": ["local", "systemic"] },
+        "reaction_type": {
+          "type": "string",
+          "enum": [
+            "Pain at injection site",
+            "Swelling/induration at injection site",
+            "Redness/bruising at injection site",
+            "Localized rash",
+            "Rash/hives",
+            "Headache",
+            "Cyanosis/pallor",
+            "Difficulty breathing",
+            "Nausea/vomiting",
+            "Diarrhoea",
+            "Poor appetite/loss of appetite",
+            "Fatigue/malaise",
+            "Fever",
+            "Drowsiness",
+            "Muscle aches/joint pain",
+            "Irritability/fussiness (children < 6 years old)",
+            "Other"
+          ]
+        },
+        "specify": { "type": "string", "description": "Free text; required only when reaction_type = Other." },
+        "occurred": { "type": "boolean", "description": "The Yes/No question for this reaction." },
+        "managed_at_center": { "$ref": "#/$defs/management" },
+        "managed_at_home": { "$ref": "#/$defs/management" },
+        "treatment_start_date": { "type": "string", "format": "date" },
+        "treatment_end_date": { "type": "string", "format": "date", "description": "On or after treatment_start_date." },
+        "symptom_start_datetime": { "type": "string", "format": "date-time", "description": "Symptom onset (single date-time)." },
+        "symptom_end_datetime": { "type": "string", "format": "date-time", "description": "Symptom resolution; on or after onset." }
+      },
+      "required": ["reaction_type", "category", "occurred"]
+    }
+  }
+}

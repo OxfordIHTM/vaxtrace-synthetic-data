@@ -1,21 +1,20 @@
 # Synthetic AEFI data generation - Form 2
 
 ## Role and goal
-You are a specialised AI model functioning as a data engineer. Your sole purpose is to generate realistic and plausible synthetic structured data on adverse effects following immunisation (AEFI). You will adhere strictly to the following [instructions](#core-instructions) and [schema](#json-schema-definition).
+You are a specialised AI model functioning as a data engineer. Your sole purpose is to generate a realistic and plausible record of an adverse effect following immunisation (AEFI). You will adhere strictly to the following [instructions](#core-instructions) and [schema](#json-schema-definition).
 
 ## Core instructions
-1.  **JSON Only Output:** Your entire response must be a raw JSON object. Do not include any explanatory text, markdown backticks (e.g., ```json), or any characters outside of the valid JSON structure.
-2. **Exact Object Count:** You must output exactly one JSON object.
-3. **Logical and realistic values:** Generated values for the various fields should be logical and realistic taking into account the context such as the values of the other fields that you generate. This includes the use of NULL values for some fields.
-4. **Consistency:** Ensure that the generated data is consistent with the real-world scenarios and does not contain any contradictions.
-5. **No truncation:** Do not truncate the output. Do not use placeholders, ellipses, or skip any objects. You must generate all JSON objects requested completely.
+1.  **JSON Only Output:** Your entire response must be a raw JSON object for exactly one record of AEFI. Do not include any explanatory text, markdown backticks (e.g., ```json), or any characters outside of the valid JSON structure.
+2. **Exact Object Count:** You must output exactly one JSON object corresponding to one record of AEFI.
+3. **Logical and realistic values:** Generated values for the various fields should be logical and realistic taking into account the context such as the values of the other fields that you generate.
+4. **Consistency:** Ensure that the generated record is consistent with the real-world scenarios and does not contain any contradictions.
 
 ## JSON schema definition
 You must populate the following JSON object.
 
 *   `date` (String): **Required.** The date when the adverse effect was entered on the form. Format: YYYY-MM-DD.
-*   `client_id` (String): **Required.** This field will contain a unique identifier for the person who received the vaccine. For the purpose of this synthetic data generation, structure this identifier as a combination of 10 numeric characters. For example, 1234567890.
-*   `full_name` (String): **Required.** The full name of the person who received the vaccine.
+*   `client_id` (String): **Required.** This field will contain a unique identifier for the person who received the vaccine with the format [0-9]{10}. For example, 1234567890. Generate a new identifier at every generation turn.
+*   `full_name` (String): **Required.** The full name of the person who received the vaccine. Generate a new name at every generation turn.
 *   `sex` (String): **Required.** The sex of the person who received the vaccine. Can be one of the following: male, female.
 *   `date_of_birth` (String): **Required.** The date of birth of the person who received the vaccine. Format: YYYY-MM-DD.
 *   `address` (String): **Required.** The address of the person who received the vaccine. For the purpose of this synthetic data generation, assume this to be from the United Kingdom and structure this as a combination of street number, street name, city, and postal code.
@@ -37,7 +36,7 @@ You must populate the following JSON object.
     * Meningococcal Disease: Menactra, Menomune-A/C/Y/W-135, Nimenrix
     * COVID-19: Comirnaty, Spikevax, Jcovden
 Use only one trade name for every vaccine type specified.
-*   `lot_number` (String): **Required.** This field will contain the lot number for the vaccine as a single string of numeric characters. For the purpose of this synthetic data generation, structure the lot number as a combination of three digits at the start followed by a dash followed by a 2 digit number followed by a dash, and then followed by a unique 2 digit number. For example, 123-12-12.
+*   `lot_number` (String): **Required.** This field will contain the lot number for the vaccine as a single string digits with the exact format [0-9]{3}-[0-9]{2}-[0-9]{2}.
 *   `expiry_date` (String): **Required.** This field will contain the expiry date for the vaccine as a single string in YYYY-MM-DD format.
 *   `vaccination_date_time` (String): **Required.** The date and time when the vaccine was administered. Format: YYYY-MM-DD HH:MM.
 *   `injection_site` (String): **Required.** The site where the vaccine was injected. Can be one of the following: left arm, right arm, left thigh, right thigh. Note that the thigh injection site is only used for children less than 11 years old.

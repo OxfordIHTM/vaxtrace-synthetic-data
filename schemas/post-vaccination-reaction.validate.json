@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OxfordIHTM/vaxtrace-synthetic-data/schemas/post-vaccination-reaction.validate.json",
+  "title": "Post-vaccination reaction record (validation)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "client_id": { "type": "string", "pattern": "^[0-9]{10}$" },
+    "date": { "type": "string", "format": "date" },
+    "vaccines_given_count": { "type": "integer", "minimum": 1 },
+    "vaccines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "trade_name": { "type": "string", "minLength": 1 },
+          "antigens": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+          "lot": { "type": "string", "minLength": 1 },
+          "expiry_date": { "type": "string", "format": "date" },
+          "injection_site": { "type": "string", "minLength": 1 }
+        },
+        "required": ["trade_name", "antigens", "lot", "expiry_date", "injection_site"]
+      }
+    },
+    "reactions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/reaction" }
+    }
+  },
+  "required": ["client_id", "date", "vaccines_given_count", "vaccines", "reactions"],
+  "$defs": {
+    "grade": { "type": "integer", "enum": [1, 2, 3] },
+    "management": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "recorded": { "type": "boolean" },
+        "grade": { "$ref": "#/$defs/grade" },
+        "adrenaline": { "type": "boolean" },
+        "other": { "type": "string" }
+      },
+      "required": ["recorded"]
+    },
+    "reaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "category": { "type": "string", "enum": ["local", "systemic"] },
+        "reaction_type": {
+          "type": "string",
+          "enum": [
+            "Pain at injection site",
+            "Swelling/induration at injection site",
+            "Redness/bruising at injection site",
+            "Localized rash",
+            "Rash/hives",
+            "Headache",
+            "Cyanosis/pallor",
+            "Difficulty breathing",
+            "Nausea/vomiting",
+            "Diarrhoea",
+            "Poor appetite/loss of appetite",
+            "Fatigue/malaise",
+            "Fever",
+            "Drowsiness",
+            "Muscle aches/joint pain",
+            "Irritability/fussiness (children < 6 years old)",
+            "Other"
+          ]
+        },
+        "specify": { "type": "string", "minLength": 1 },
+        "occurred": { "type": "boolean" },
+        "managed_at_center": { "$ref": "#/$defs/management" },
+        "managed_at_home": { "$ref": "#/$defs/management" },
+        "treatment_start_date": { "type": "string", "format": "date" },
+        "treatment_end_date": { "type": "string", "format": "date" },
+        "symptom_start_datetime": { "type": "string", "format": "date-time" },
+        "symptom_end_datetime": { "type": "string", "format": "date-time" }
+      },
+      "required": ["reaction_type", "category", "occurred"],
+      "allOf": [
+        {
+          "comment": "Other requires a specify note.",
+          "if": { "properties": { "reaction_type": { "const": "Other" } }, "required": ["reaction_type"] },
+          "then": { "required": ["specify"] }
+        },
+        {
+          "comment": "A reaction that did NOT occur must carry no detail fields.",
+          "if": { "properties": { "occurred": { "const": false } }, "required": ["occurred"] },
+          "then": {
+            "not": {
+              "anyOf": [
+                { "required": ["managed_at_center"] },
+                { "required": ["managed_at_home"] },
+                { "required": ["treatment_start_date"] },
+                { "required": ["treatment_end_date"] },
+                { "required": ["symptom_start_datetime"] },
+                { "required": ["symptom_end_datetime"] }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

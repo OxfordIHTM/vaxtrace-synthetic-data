@@ -6,10 +6,6 @@ llm_create_form1_type <- function() {
   ellmer::type_array(
     ellmer::type_object(
       "Specification of expected data structure for form 1 synthetic data",
-      number = ellmer::type_integer(
-        description = "A sequential number to identify the record.",
-        required = TRUE
-      ),
       type_of_vaccine = ellmer::type_enum(
         values = c(
           "BCG", "Hepatitis B", "Polio",
@@ -35,11 +31,11 @@ llm_create_form1_type <- function() {
         required = TRUE
       ),
       authorisation_number = ellmer::type_string(
-        description = "Authorisation number for the vaccine administered to the patient.",
+        description = "Authorisation number for the vaccine administered to the patient with the format [A-Z]{3}-[0-9]{6}.",
         required = TRUE
       ),
       lot_number = ellmer::type_string(
-        description = "Lot number for the vaccine administered to the patient.",
+        description = "Lot number for the vaccine administered to the patient with the format [0-9]{3}-[0-9]{2}-[0-9]{2}.",
         required = TRUE
       ),
       expiry_date = ellmer::type_string(
@@ -47,7 +43,7 @@ llm_create_form1_type <- function() {
         required = TRUE
       ),
       customer_id = ellmer::type_string(
-        description = "Customer ID for the patient.",
+        description = "Customer ID for the patient with the format [0-9]{10}.",
         required = TRUE
       ),
       fever = ellmer::type_enum(

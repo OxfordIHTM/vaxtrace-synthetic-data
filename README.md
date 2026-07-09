@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Generating synthetic adverse event from immunisation (AEFI) data for the VAXTRACE project
+# Generating synthetic adverse event following immunisation (AEFI) data for the VAXTRACE project
 
 <!-- badges: start -->
 
@@ -12,7 +12,8 @@ This repository is a
 [`{targets}`](https://docs.ropensci.org/targets/)-based,
 [`{renv}`](https://rstudio.github.io/renv/articles/renv.html)-enabled
 [`R`](https://cran.r-project.org/) workflow for generating synthetic
-adverse event from immunisation (AEFI) data for the VAXTRACE project.
+adverse event following immunisation (AEFI) data for the VAXTRACE
+project.
 
 ## About the Project
 
@@ -108,12 +109,101 @@ project is being initiated for the first time by a user.
 The current workflow has the following steps:
 
 ``` mermaid
+graph LR
+  style Graph fill:#FFFFFF00,stroke:#000000;
+  subgraph Graph
+    direction LR
+    xd42e66ad3decaa43(["gemma_model_name"]):::skipped --> xa83e0071a9cae2ed(["gemma_form1_data_generator"]):::queued
+    x7a6414ea3d72c787(["prompt_form1_synthetic_data"]):::queued --> xa83e0071a9cae2ed(["gemma_form1_data_generator"]):::queued
+    xa83e0071a9cae2ed(["gemma_form1_data_generator"]):::queued --> x97d11b2210c9dff0["gemma_form1_synthetic_data"]:::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x97d11b2210c9dff0["gemma_form1_synthetic_data"]:::queued
+    xbd193c6107524228(["output_type_form1_synthetic_data"]):::queued --> x97d11b2210c9dff0["gemma_form1_synthetic_data"]:::queued
+    xd631249566969664(["prompt_form2_synthetic_data"]):::queued --> x8a2373b00d4dee5b(["gemma_form2_data_generator"]):::queued
+    xd42e66ad3decaa43(["gemma_model_name"]):::skipped --> x8a2373b00d4dee5b(["gemma_form2_data_generator"]):::queued
+    xad13a45cf0dcdcd8(["output_type_form2_synthetic_data"]):::queued --> x4f03b1614e8d6702["gemma_form2_synthetic_data"]:::queued
+    x8a2373b00d4dee5b(["gemma_form2_data_generator"]):::queued --> x4f03b1614e8d6702["gemma_form2_synthetic_data"]:::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x4f03b1614e8d6702["gemma_form2_synthetic_data"]:::queued
+    x167e9ded0377a928(["prompt_form3_synthetic_data"]):::completed --> xc95a0e8b7e274488(["gemma_form3_data_generator"]):::skipped
+    xd42e66ad3decaa43(["gemma_model_name"]):::skipped --> xc95a0e8b7e274488(["gemma_form3_data_generator"]):::skipped
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::dispatched
+    x32126c198b3cd3f7(["output_type_form3_synthetic_data"]):::completed --> xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::dispatched
+    xc95a0e8b7e274488(["gemma_form3_data_generator"]):::skipped --> xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::dispatched
+    x37523a36a9dfc345(["gpt_model_name"]):::skipped --> x4f0bdf5e1f47cf2c(["gpt_form1_data_generator"]):::queued
+    x7a6414ea3d72c787(["prompt_form1_synthetic_data"]):::queued --> x4f0bdf5e1f47cf2c(["gpt_form1_data_generator"]):::queued
+    x4f0bdf5e1f47cf2c(["gpt_form1_data_generator"]):::queued --> xb09553cf68160c6b["gpt_form1_synthetic_data"]:::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> xb09553cf68160c6b["gpt_form1_synthetic_data"]:::queued
+    xbd193c6107524228(["output_type_form1_synthetic_data"]):::queued --> xb09553cf68160c6b["gpt_form1_synthetic_data"]:::queued
+    xd631249566969664(["prompt_form2_synthetic_data"]):::queued --> xf7c632fbd4b3de83(["gpt_form2_data_generator"]):::queued
+    x37523a36a9dfc345(["gpt_model_name"]):::skipped --> xf7c632fbd4b3de83(["gpt_form2_data_generator"]):::queued
+    xad13a45cf0dcdcd8(["output_type_form2_synthetic_data"]):::queued --> x8b1d50ae8813fa86["gpt_form2_synthetic_data"]:::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x8b1d50ae8813fa86["gpt_form2_synthetic_data"]:::queued
+    xf7c632fbd4b3de83(["gpt_form2_data_generator"]):::queued --> x8b1d50ae8813fa86["gpt_form2_synthetic_data"]:::queued
+    x167e9ded0377a928(["prompt_form3_synthetic_data"]):::completed --> x5048fe4169e9a3e5(["gpt_form3_data_generator"]):::skipped
+    x37523a36a9dfc345(["gpt_model_name"]):::skipped --> x5048fe4169e9a3e5(["gpt_form3_data_generator"]):::skipped
+    x5048fe4169e9a3e5(["gpt_form3_data_generator"]):::skipped --> x329fde7cdf80071c["gpt_form3_synthetic_data"]:::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x329fde7cdf80071c["gpt_form3_synthetic_data"]:::queued
+    x32126c198b3cd3f7(["output_type_form3_synthetic_data"]):::completed --> x329fde7cdf80071c["gpt_form3_synthetic_data"]:::queued
+    x7a6414ea3d72c787(["prompt_form1_synthetic_data"]):::queued --> xc666f3b340312894(["llama_form1_data_generator"]):::queued
+    x935cdda349ceab25(["llama_model_name"]):::skipped --> xc666f3b340312894(["llama_form1_data_generator"]):::queued
+    xc666f3b340312894(["llama_form1_data_generator"]):::queued --> x95ed1bde7c3003e7["llama_form1_synthetic_data"]:::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x95ed1bde7c3003e7["llama_form1_synthetic_data"]:::queued
+    xbd193c6107524228(["output_type_form1_synthetic_data"]):::queued --> x95ed1bde7c3003e7["llama_form1_synthetic_data"]:::queued
+    xd631249566969664(["prompt_form2_synthetic_data"]):::queued --> x47608fbfbe3428bf(["llama_form2_data_generator"]):::queued
+    x935cdda349ceab25(["llama_model_name"]):::skipped --> x47608fbfbe3428bf(["llama_form2_data_generator"]):::queued
+    x47608fbfbe3428bf(["llama_form2_data_generator"]):::queued --> x476af4f7d71cafcf["llama_form2_synthetic_data"]:::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x476af4f7d71cafcf["llama_form2_synthetic_data"]:::queued
+    xad13a45cf0dcdcd8(["output_type_form2_synthetic_data"]):::queued --> x476af4f7d71cafcf["llama_form2_synthetic_data"]:::queued
+    x167e9ded0377a928(["prompt_form3_synthetic_data"]):::completed --> x8f2349cb95aa2f3c(["llama_form3_data_generator"]):::skipped
+    x935cdda349ceab25(["llama_model_name"]):::skipped --> x8f2349cb95aa2f3c(["llama_form3_data_generator"]):::skipped
+    x8f2349cb95aa2f3c(["llama_form3_data_generator"]):::skipped --> x5a6907a7d4c752af["llama_form3_synthetic_data"]:::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x5a6907a7d4c752af["llama_form3_synthetic_data"]:::queued
+    x32126c198b3cd3f7(["output_type_form3_synthetic_data"]):::completed --> x5a6907a7d4c752af["llama_form3_synthetic_data"]:::queued
+    xea527aecf1216e4d(["prompt_form1_md"]):::queued --> x7a6414ea3d72c787(["prompt_form1_synthetic_data"]):::queued
+    x67c0e4a7435652b2(["prompt_form2_md"]):::queued --> xd631249566969664(["prompt_form2_synthetic_data"]):::queued
+    x1cbdea0788747642(["prompt_form3_md"]):::completed --> x167e9ded0377a928(["prompt_form3_synthetic_data"]):::completed
+    x20bc3615a27843ed(["qwen_model_name"]):::skipped --> x464fda4f56716c6c(["qwen_form1_data_generator"]):::queued
+    x7a6414ea3d72c787(["prompt_form1_synthetic_data"]):::queued --> x464fda4f56716c6c(["qwen_form1_data_generator"]):::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x325f765d48136efd["qwen_form1_synthetic_data"]:::queued
+    xbd193c6107524228(["output_type_form1_synthetic_data"]):::queued --> x325f765d48136efd["qwen_form1_synthetic_data"]:::queued
+    x464fda4f56716c6c(["qwen_form1_data_generator"]):::queued --> x325f765d48136efd["qwen_form1_synthetic_data"]:::queued
+    x20bc3615a27843ed(["qwen_model_name"]):::skipped --> xbb45be8776627627(["qwen_form2_data_generator"]):::queued
+    xd631249566969664(["prompt_form2_synthetic_data"]):::queued --> xbb45be8776627627(["qwen_form2_data_generator"]):::queued
+    xbb45be8776627627(["qwen_form2_data_generator"]):::queued --> x1186a9719c6f8679["qwen_form2_synthetic_data"]:::queued
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x1186a9719c6f8679["qwen_form2_synthetic_data"]:::queued
+    xad13a45cf0dcdcd8(["output_type_form2_synthetic_data"]):::queued --> x1186a9719c6f8679["qwen_form2_synthetic_data"]:::queued
+    x167e9ded0377a928(["prompt_form3_synthetic_data"]):::completed --> x60ed2f036c1cbc38(["qwen_form3_data_generator"]):::skipped
+    x20bc3615a27843ed(["qwen_model_name"]):::skipped --> x60ed2f036c1cbc38(["qwen_form3_data_generator"]):::skipped
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x4a6aa30ed756cd46["qwen_form3_synthetic_data"]:::queued
+    x32126c198b3cd3f7(["output_type_form3_synthetic_data"]):::completed --> x4a6aa30ed756cd46["qwen_form3_synthetic_data"]:::queued
+    x60ed2f036c1cbc38(["qwen_form3_data_generator"]):::skipped --> x4a6aa30ed756cd46["qwen_form3_synthetic_data"]:::queued
+    x7a48759e707a63b8(["synthetic_data_rows"]):::completed --> x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed
+    x72f6a851cebefa43(["synthetic_data_user_prompt"]):::completed --> x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed
+    xd0a85fc91769a844(["synthetic_data_raw_form1"]):::queued --> x945a6fcee29bff82(["synthetic_data_processed_form1"]):::queued
+    x945a6fcee29bff82(["synthetic_data_processed_form1"]):::queued --> xba9a578a75872a66(["synthetic_data_processed_form1_csv"]):::queued
+    xee1a7b8ba942a927(["synthetic_data_raw_form2"]):::queued --> x48546624f516ebe0(["synthetic_data_processed_form2"]):::queued
+    x48546624f516ebe0(["synthetic_data_processed_form2"]):::queued --> x2d286e31906b2627(["synthetic_data_processed_form2_csv"]):::queued
+    x04b5d7b449feb997["synthetic_data_raw_flattened_form3"]:::queued --> x27c53e7117787140(["synthetic_data_processed_form3"]):::queued
+    xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued --> x04b5d7b449feb997["synthetic_data_raw_flattened_form3"]:::queued
+    x97d11b2210c9dff0["gemma_form1_synthetic_data"]:::queued --> xd0a85fc91769a844(["synthetic_data_raw_form1"]):::queued
+    x325f765d48136efd["qwen_form1_synthetic_data"]:::queued --> xd0a85fc91769a844(["synthetic_data_raw_form1"]):::queued
+    x95ed1bde7c3003e7["llama_form1_synthetic_data"]:::queued --> xd0a85fc91769a844(["synthetic_data_raw_form1"]):::queued
+    xb09553cf68160c6b["gpt_form1_synthetic_data"]:::queued --> xd0a85fc91769a844(["synthetic_data_raw_form1"]):::queued
+    x476af4f7d71cafcf["llama_form2_synthetic_data"]:::queued --> xee1a7b8ba942a927(["synthetic_data_raw_form2"]):::queued
+    x8b1d50ae8813fa86["gpt_form2_synthetic_data"]:::queued --> xee1a7b8ba942a927(["synthetic_data_raw_form2"]):::queued
+    x4f03b1614e8d6702["gemma_form2_synthetic_data"]:::queued --> xee1a7b8ba942a927(["synthetic_data_raw_form2"]):::queued
+    x1186a9719c6f8679["qwen_form2_synthetic_data"]:::queued --> xee1a7b8ba942a927(["synthetic_data_raw_form2"]):::queued
+    x329fde7cdf80071c["gpt_form3_synthetic_data"]:::queued --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
+    x4a6aa30ed756cd46["qwen_form3_synthetic_data"]:::queued --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
+    x5a6907a7d4c752af["llama_form3_synthetic_data"]:::queued --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
+    xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::dispatched --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
+    xa87a62a227d5e627(["llm_parameters"]):::queued
+  end
 ```
 
 ## Authors
 
-Dr Inae Kim - University of Oxford Dr Ernest Guevarra - University of
-Oxford
+- Dr Inae Kim - University of Oxford
+- Dr Ernest Guevarra - University of Oxford
 
 ## License
 

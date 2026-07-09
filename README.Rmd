@@ -11,12 +11,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Generating synthetic adverse event from immunisation (AEFI) data for the VAXTRACE project
+# Generating synthetic adverse event following immunisation (AEFI) data for the VAXTRACE project
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-This repository is a [`docker`](https://www.docker.com/get-started)-containerised, [`{targets}`](https://docs.ropensci.org/targets/)-based, [`{renv}`](https://rstudio.github.io/renv/articles/renv.html)-enabled [`R`](https://cran.r-project.org/) workflow for generating synthetic adverse event from immunisation (AEFI) data for the VAXTRACE project.
+This repository is a [`docker`](https://www.docker.com/get-started)-containerised, [`{targets}`](https://docs.ropensci.org/targets/)-based, [`{renv}`](https://rstudio.github.io/renv/articles/renv.html)-enabled [`R`](https://cran.r-project.org/) workflow for generating synthetic adverse event following immunisation (AEFI) data for the VAXTRACE project.
 
 ## About the Project
 
@@ -100,8 +100,8 @@ cat(
 
 ## Authors
 
-Dr Inae Kim - University of Oxford
-Dr Ernest Guevarra - University of Oxford
+* Dr Inae Kim - University of Oxford
+* Dr Ernest Guevarra - University of Oxford
 
 ## License
 
