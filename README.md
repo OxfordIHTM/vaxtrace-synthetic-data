@@ -5,6 +5,9 @@
 
 <!-- badges: start -->
 
+[![Project Status: WIP – Initial development is in progress, but there
+has not yet been a stable, usable release suitable for the
+public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
 
 This repository is a
@@ -129,9 +132,9 @@ graph LR
     x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x4f03b1614e8d6702["gemma_form2_synthetic_data"]:::queued
     x167e9ded0377a928(["prompt_form3_synthetic_data"]):::completed --> xc95a0e8b7e274488(["gemma_form3_data_generator"]):::skipped
     xd42e66ad3decaa43(["gemma_model_name"]):::skipped --> xc95a0e8b7e274488(["gemma_form3_data_generator"]):::skipped
-    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::dispatched
-    x32126c198b3cd3f7(["output_type_form3_synthetic_data"]):::completed --> xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::dispatched
-    xc95a0e8b7e274488(["gemma_form3_data_generator"]):::skipped --> xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::dispatched
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::completed
+    x32126c198b3cd3f7(["output_type_form3_synthetic_data"]):::completed --> xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::completed
+    xc95a0e8b7e274488(["gemma_form3_data_generator"]):::skipped --> xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::completed
     x37523a36a9dfc345(["gpt_model_name"]):::skipped --> x4f0bdf5e1f47cf2c(["gpt_form1_data_generator"]):::queued
     x7a6414ea3d72c787(["prompt_form1_synthetic_data"]):::queued --> x4f0bdf5e1f47cf2c(["gpt_form1_data_generator"]):::queued
     x4f0bdf5e1f47cf2c(["gpt_form1_data_generator"]):::queued --> xb09553cf68160c6b["gpt_form1_synthetic_data"]:::queued
@@ -159,9 +162,9 @@ graph LR
     xad13a45cf0dcdcd8(["output_type_form2_synthetic_data"]):::queued --> x476af4f7d71cafcf["llama_form2_synthetic_data"]:::queued
     x167e9ded0377a928(["prompt_form3_synthetic_data"]):::completed --> x8f2349cb95aa2f3c(["llama_form3_data_generator"]):::skipped
     x935cdda349ceab25(["llama_model_name"]):::skipped --> x8f2349cb95aa2f3c(["llama_form3_data_generator"]):::skipped
-    x8f2349cb95aa2f3c(["llama_form3_data_generator"]):::skipped --> x5a6907a7d4c752af["llama_form3_synthetic_data"]:::queued
-    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x5a6907a7d4c752af["llama_form3_synthetic_data"]:::queued
-    x32126c198b3cd3f7(["output_type_form3_synthetic_data"]):::completed --> x5a6907a7d4c752af["llama_form3_synthetic_data"]:::queued
+    x8f2349cb95aa2f3c(["llama_form3_data_generator"]):::skipped --> x5a6907a7d4c752af["llama_form3_synthetic_data"]:::dispatched
+    x2f94ae86c3dc82fd(["synthetic_data_generation_prompt_list"]):::completed --> x5a6907a7d4c752af["llama_form3_synthetic_data"]:::dispatched
+    x32126c198b3cd3f7(["output_type_form3_synthetic_data"]):::completed --> x5a6907a7d4c752af["llama_form3_synthetic_data"]:::dispatched
     xea527aecf1216e4d(["prompt_form1_md"]):::queued --> x7a6414ea3d72c787(["prompt_form1_synthetic_data"]):::queued
     x67c0e4a7435652b2(["prompt_form2_md"]):::queued --> xd631249566969664(["prompt_form2_synthetic_data"]):::queued
     x1cbdea0788747642(["prompt_form3_md"]):::completed --> x167e9ded0377a928(["prompt_form3_synthetic_data"]):::completed
@@ -198,8 +201,8 @@ graph LR
     x1186a9719c6f8679["qwen_form2_synthetic_data"]:::queued --> xee1a7b8ba942a927(["synthetic_data_raw_form2"]):::queued
     x329fde7cdf80071c["gpt_form3_synthetic_data"]:::queued --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
     x4a6aa30ed756cd46["qwen_form3_synthetic_data"]:::queued --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
-    x5a6907a7d4c752af["llama_form3_synthetic_data"]:::queued --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
-    xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::dispatched --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
+    x5a6907a7d4c752af["llama_form3_synthetic_data"]:::dispatched --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
+    xcf9d77edbaa72570["gemma_form3_synthetic_data"]:::completed --> xc3a247eec291fc20(["synthetic_data_raw_form3"]):::queued
     xa87a62a227d5e627(["llm_parameters"]):::queued
   end
 ```
