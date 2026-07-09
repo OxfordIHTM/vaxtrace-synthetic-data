@@ -34,8 +34,10 @@ vaxtrace-synthetic-data
     |-- data-raw/
     |-- data/
     |-- outputs/
-    |-- renv
-    |-- reports
+    |-- prompts/
+    |-- renv/
+    |-- reports/
+    |-- schemas/
     |-- .Rprofile
     |-- _targets*.R
     |-- packages.R

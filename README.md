@@ -32,8 +32,10 @@ The project repository is structured as follows:
         |-- data-raw/
         |-- data/
         |-- outputs/
-        |-- renv
-        |-- reports
+        |-- prompts/
+        |-- renv/
+        |-- reports/
+        |-- schemas/
         |-- .Rprofile
         |-- _targets*.R
         |-- packages.R
