@@ -6,12 +6,6 @@ suppressPackageStartupMessages(source("packages.R"))
 for (f in list.files(here::here("R"), full.names = TRUE)) source (f)
 
 
-## Data targets ----
-data_targets <- tar_plan(
-  
-)
-
-
 ## LLM targets ----
 llm_targets <- tar_plan(
   ### LLM parameters ----
@@ -24,166 +18,127 @@ llm_targets <- tar_plan(
     )
   ),
 
-  ### LLM prompt files ----
+  ### LLM user prompt ----
   tar_target(
-    name = prompt_form1_md,
-    command = "prompts/form1_system_prompt.md",
+    name = synthetic_data_user_prompt,
+    command = readLines("prompts/user_prompt.md"),
     cue = tar_cue("always")
-  ),
-
-  ### LLM prompt targets ----
-  tar_target(
-    name = synthetic_data_form1_prompt,
-    command = ellmer::interpolate_file(path = prompt_form1_md, n_rows = 1000L),
-    cue = tar_cue("always")
-  ),
-
-  ### LLM synthetic data generation output types ----
-  tar_target(
-    name = synthetic_data_output_type,
-    command = llm_create_form1_type()
   ),
 
   ### Number of synthetic data rows to generate ----
-  synthetic_data_rows = 200L,
+  tar_target(
+    name = synthetic_data_rows,
+    command = 50L,
+    cue = tar_cue("always")
+  ),
 
   ### Create a list of prompts to trigger dynamic branching ----
   tar_target(
     name = synthetic_data_generation_prompt_list,
     command = rep(
-      "Generate synthetic data based on the provided system prompt.",
+      synthetic_data_user_prompt,
       times = synthetic_data_rows
-    )
-  )
-)
-
-
-## Gemini synthetic data generation targets ----
-gemini_synthetic_data_targets <- tar_plan(
-  ### Model name for Gemini LLM ----
-  gemini_model_name = "gemini-pro-latest",
-
-  ### Gemini synthetic data generator ----
-  tar_target(
-    name = gemini_data_generator,
-    command = ellmer::chat_google_gemini(
-      model = gemini_model_name,
-      system_prompt = synthetic_data_form1_prompt,
-      params = llm_parameters,
-      echo = "none"
-    )
+    ),
+    cue = tar_cue("always")
   ),
 
-  ### Synthetic data generation ----
-  tar_target(
-    name = gemini_synthetic_data_form1,
-    command = llm_generate_synthetic_data(
-      generator = gemini_data_generator,
-      prompt = synthetic_data_generation_prompt_list,
-      type = synthetic_data_output_type,
-      model = gemini_model_name
-    ),
-    pattern = map(synthetic_data_generation_prompt_list)
-  )
-)
-
-
-## gemma synthetic data generation targets ----
-gemma_synthetic_data_targets <- tar_plan(
   ### Model name for Gemma LLM ----
   targets::tar_target(
     name = gemma_model_name,
     command = get_llm_name("gemma3")
   ),
 
-  ### Gemma synthetic data generator ----
-  tar_target(
-    name = gemma_data_generator,
-    command = ellmer::chat_ollama(
-      model = gemma_model_name,
-      echo = "none"
-    )
-  ),
-
-  ### Synthetic data generation ----
-  tar_target(
-    name = gemma_synthetic_data_form1,
-    command = llm_generate_synthetic_data(
-      generator = gemma_data_generator,
-      prompt = synthetic_data_generation_prompt_list,
-      type = synthetic_data_output_type,
-      model = gemma_model_name
-    ),
-    pattern = map(synthetic_data_generation_prompt_list)
-  )
-)
-
-
-## gpt synthetic data generation targets ----
-gpt_synthetic_data_targets <- tar_plan(
-  ### Model name for Gemma LLM ----
+  ### Model name for gpt LLM ----
   targets::tar_target(
     name = gpt_model_name,
     command = get_llm_name("gpt")
-  ),
+  ),  
 
-  ### gpt synthetic data generator ----
-  tar_target(
-    name = gpt_data_generator,
-    command = ellmer::chat_ollama(
-      model = gpt_model_name,
-      echo = "none"
-    )
-  ),
-
-  ### Synthetic data generation ----
-  tar_target(
-    name = gpt_synthetic_data_form1,
-    command = llm_generate_synthetic_data(
-      generator = gpt_data_generator,
-      prompt = synthetic_data_generation_prompt_list,
-      type = synthetic_data_output_type,
-      model = gpt_model_name
-    ),
-    pattern = map(synthetic_data_generation_prompt_list)
-  )
-)
-
-
-## llama synthetic data generation targets ----
-llama_synthetic_data_targets <- tar_plan(
   ### Model name for llama LLM ----
   targets::tar_target(
     name = llama_model_name,
     command = get_llm_name("llama4")
   ),
 
-  ### llama synthetic data generator ----
-  tar_target(
-    name = llama_data_generator,
-    command = ellmer::chat_ollama(
-      model = llama_model_name,
-      echo = "none"
-    )
-  ),
-
-  ### Synthetic data generation ----
-  tar_target(
-    name = llama_synthetic_data_form1,
-    command = llm_generate_synthetic_data(
-      generator = llama_data_generator,
-      prompt = synthetic_data_generation_prompt_list,
-      type = synthetic_data_output_type,
-      model = llama_model_name
-    ),
-    pattern = map(synthetic_data_generation_prompt_list)
+  ### Model name for qwen LLM ----
+  targets::tar_target(
+    name = qwen_model_name,
+    command = get_llm_name("qwen3.5")
   )
 )
 
 
+## Form 1 synthetic data generation targets ----
+source("_targets_form1.R")
+
+
+## Form 2 synthetic data generation targets ----
+source("_targets_form2.R")
+
+
+## Form 3 synthetic data generation targets ----
+source("_targets_form3.R")
+
+
 ## Processing targets ----
 processing_targets <- tar_plan(
-  
+  ### Concatenate form1 synthetic data ----
+  tar_target(
+    name = synthetic_data_raw_form1,
+    command = rbind(
+      gemma = gemma_form1_synthetic_data,
+      gpt = gpt_form1_synthetic_data,
+      llama = llama_form1_synthetic_data,
+      qwen = qwen_form1_synthetic_data
+    )
+  ),
+
+  ### Process form1 synthetic data ----
+  tar_target(
+    name = synthetic_data_processed_form1,
+    command = process_synthetic_data(synthetic_data_raw_form1)
+  ),
+
+  ### Concatenate form2 synthetic data ----
+  tar_target(
+    name = synthetic_data_raw_form2,
+    command = rbind(
+      gemma = gemma_form2_synthetic_data,
+      gpt = gpt_form2_synthetic_data,
+      llama = llama_form2_synthetic_data,
+      qwen = qwen_form2_synthetic_data
+    )
+  ),
+
+  ### Process form2 synthetic data ----
+  tar_target(
+    name = synthetic_data_processed_form2,
+    command = process_synthetic_data(synthetic_data_raw_form2)
+  ),
+
+  ### Concatenate form3 synthetic data ----
+  tar_target(
+    name = synthetic_data_raw_form3,
+    command = c(
+      gemma = gemma_form3_synthetic_data,
+      gpt = gpt_form3_synthetic_data,
+      llama = llama_form3_synthetic_data,
+      qwen = qwen_form3_synthetic_data
+    )
+  ),
+
+  ### Flatten form3 synthetic data raw ----
+  tar_target(
+    name = synthetic_data_raw_flattened_form3,
+    command = process_form3_record(synthetic_data_raw_form3),
+    pattern = map(synthetic_data_raw_form3)
+  ),
+
+  ### Process form3 synthetic data ----
+  tar_target(
+    name = synthetic_data_processed_form3,
+    command = process_synthetic_data(synthetic_data_raw_flattened_form3)
+  )
 )
 
 
@@ -196,12 +151,20 @@ analysis_targets <- tar_plan(
 ## Output targets ----
 output_targets <- tar_plan(
   tar_target(
-    name = gemini_form1_csv_path,
+    name = synthetic_data_processed_form1_csv,
     command = output_to_csv(
-      data = gemini_synthetic_data_form1,
-      path = "data/gemini_synthetic_data_form1.csv",
+      data = synthetic_data_processed_form1,
+      path = "data/synthetic_data_form1.csv",
       overwrite = TRUE
-    ),
+    )
+  ),
+  tar_target(
+    name = synthetic_data_processed_form2_csv,
+    command = output_to_csv(
+      data = synthetic_data_processed_form2,
+      path = "data/synthetic_data_form2.csv",
+      overwrite = TRUE
+    )
   )
 )
 
