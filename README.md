@@ -32,7 +32,7 @@ The project repository is structured as follows:
         |-- renv
         |-- reports
         |-- .Rprofile
-        |-- _targets.R
+        |-- _targets*.R
         |-- packages.R
         |-- renv.lock
 
@@ -52,6 +52,8 @@ The project repository is structured as follows:
 - `outputs/` contains compiled reports and figures produced by the
   workflow.
 
+- `prompts/` contains prompts used in the workflow.
+
 - `renv/` contains `renv` package specific files and directories used by
   the package for maintaining R package dependencies within the project.
   The directory `renv/library`, is a library that contains all packages
@@ -62,12 +64,14 @@ The project repository is structured as follows:
 - `reports/` contains literate code for R Markdown and/or Quarto reports
   rendered in the workflow.
 
+- `schemas/` contains JSON data schemas used in the workflow.
+
 - `.Rprofile` file is a project R profile generated when initiating
   `renv` for the first time. This file is run automatically every time R
   is run within this project, and `renv` uses it to configure the R
   session to use the `renv` project library.
 
-- `_targets.R` file defines the steps in the workflow’s data ingest,
+- `_targets*.R` files define the steps in the workflow’s data ingest,
   data processing, data analysis, and reporting pipeline.
 
 - `packages.R` file lists out all R package dependencies required by the
@@ -202,13 +206,24 @@ graph LR
 
 ## Authors
 
-- Dr Inae Kim - University of Oxford
-- Dr Ernest Guevarra - University of Oxford
+- [Dr Inae
+  Kim](https://www.rhodeshouse.ox.ac.uk/scholar-community/rhodes-scholar-bios/rhodes-scholars-class-of-2025/inae-kim/) -
+  University of Oxford
+- [Dr Ernest Guevarra](https://ernest.guevarra.io) - University of
+  Oxford
 
 ## License
 
-\[LICENSE INFORMATION GOES HERE\]
+All code in this project is released under a
+[GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.en.html#license-text)
+license. All text in this project is released under a
+[CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/deed.en)
+license. All data is released under a
+[CC0](https://creativecommons.org/public-domain/cc0/) license.
 
 ## Citation
 
-\[CITATION INFORMATION GOES HERE\]
+If you use the code, text, and/or data provided in this repository in
+your work/research, please cite this work using the suggested
+appropriate citation provided in
+[CITATION.cff](https://github.com/OxfordIHTM/vaxtrace-synthetic-data/blob/main/CITATION.cff).
