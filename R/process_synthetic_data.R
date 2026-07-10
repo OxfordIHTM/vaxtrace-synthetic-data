@@ -2,7 +2,7 @@
 #' Process synthetic data
 #' 
 
-process_synthetic_data <- function(.data) {
+process_synthetic_data <- function(.data, form = NULL) {
   if (!is.data.frame(.data)) {
     .data <- .data[[1]]
   }
@@ -24,6 +24,10 @@ process_synthetic_data <- function(.data) {
       dplyr::mutate(
         client_id = generate_random_id(size = n_rows)
       )
+  }
+
+  if (!is.null(form) && form == "form4") {
+    .data <- unnest_form4_synthetic_data(.data = .data)
   }
 
   .data
