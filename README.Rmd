@@ -15,6 +15,10 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![version](https://img.shields.io/badge/version-v0.0.0.9000-orange)](https://github.com/OxfordIHTM/computer-vision-demo/releases/tag/v0.0.0.9000)
+[![License for code](https://img.shields.io/badge/license_for_code-GPL3.0-blue)](https://opensource.org/licenses/gpl-3.0.html)
+[![License for text](https://img.shields.io/badge/license_for_writing-CC_BY_4.0-blue)](https://creativecommons.org/licenses/by/4.0/)
+[![License for data](https://img.shields.io/badge/license_for_data-CC0-blue)](https://creativecommons.org/public-domain/cc0/)
 <!-- badges: end -->
 
 This repository is a [`docker`](https://www.docker.com/get-started)-containerised, [`{targets}`](https://docs.ropensci.org/targets/)-based, [`{renv}`](https://rstudio.github.io/renv/articles/renv.html)-enabled [`R`](https://cran.r-project.org/) workflow for generating synthetic adverse event following immunisation (AEFI) data for the VAXTRACE project.
@@ -93,7 +97,7 @@ This project uses [`ollama`](https://ollama.com/) to serve open large language m
  
 Once `ollama` is installed, pull the mentioned models above into your local machine. Please note the required random access memory (RAM) sizes for each of these models and ensure that the machine you are using has enough RAM to fit these models.
 
-For this project, the team used a **Mac Studio M3 Ultra with a 32-core CPU, 80-core GPU, and a 512GB RAM**.
+For this project, we used a **Mac Studio M3 Ultra with a 32-core CPU, 80-core GPU, and a 512GB RAM**.
 
 ### R version
 
@@ -148,5 +152,4 @@ If you use the code, text, and/or data provided in this repository in
 your work/research, please cite this work using the suggested
 appropriate citation provided in
 [CITATION.cff](https://github.com/OxfordIHTM/vaxtrace-synthetic-data/blob/main/CITATION.cff).
-
 
