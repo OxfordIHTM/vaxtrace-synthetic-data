@@ -14,7 +14,7 @@ message: "If you use the code, text, or data in this repository, please cite it 
 title: "Generating synthetic adverse event following immunisation (AEFI) data for the VAXTRACE project"
 repository-code: https://github.com/OxfordIHTM/vaxtrace-synthetic-data
 license: GPL-3.0-or-later
-date-released: 2026-07-09
+date-released: 2026-07-10
 version: 0.0.0.9000
 # identifiers:
 #   - type: doi
