@@ -30,5 +30,9 @@ process_synthetic_data <- function(.data, form = NULL) {
     .data <- unnest_form4_synthetic_data(.data = .data)
   }
 
+  if (!is.null(form) && form == "form3") {
+    .data <- unnest_form3_synthetic_data(.data = .data)
+  }
+
   .data
 }
