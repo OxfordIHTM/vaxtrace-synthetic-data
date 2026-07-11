@@ -141,7 +141,9 @@ processing_targets <- tar_plan(
   ### Process form3 synthetic data ----
   tar_target(
     name = synthetic_data_processed_form3,
-    command = process_synthetic_data(synthetic_data_raw_flattened_form3)
+    command = process_synthetic_data(
+      synthetic_data_raw_flattened_form3, form = "form3"
+    )
   ),
 
   ### Concatenate form4 synthetic data ----
@@ -193,6 +195,14 @@ output_targets <- tar_plan(
     command = output_to_csv(
       data = synthetic_data_processed_form2,
       path = "data/synthetic_data_form2.csv",
+      overwrite = TRUE
+    )
+  ),
+  tar_target(
+    name = synthetic_data_processed_form3_csv,
+    command = output_to_csv(
+      data = synthetic_data_processed_form3,
+      path = "data/synthetic_data_form3.csv",
       overwrite = TRUE
     )
   ),
